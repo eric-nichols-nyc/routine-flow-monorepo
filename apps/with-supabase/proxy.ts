@@ -1,9 +1,11 @@
 import { type NextRequest } from 'next/server'
-import { updateSession } from './lib/supabase/proxy'
+import { updateSession } from '@repo/supabase/middleware'
 
 export async function proxy(request: NextRequest) {
-  // update user's auth session
-  return await updateSession(request)
+  return await updateSession(request, {
+    publicRoutes: ['/login'],
+    defaultAuthenticatedRoute: '/routines',
+  })
 }
 
 export const config = {

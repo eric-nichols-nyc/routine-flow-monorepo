@@ -2,46 +2,84 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { z } from 'zod'
+import { createClient } from '@repo/supabase/server'
 
-import { createClient } from '../../../lib/supabase/server'
+const authSchema = z.object({
+    email: z.string().email('Please enter a valid email address'),
+    password: z.string().min(6, 'Password must be at least 6 characters'),
+})
 
-export async function login(formData: FormData) {
-    const supabase = await createClient()
-
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
-    const data = {
-        email: formData.get('email') as string,
-        password: formData.get('password') as string,
+export type AuthState = {
+    error?: string
+    fieldErrors?: {
+        email?: string[]
+        password?: string[]
     }
-
-    const { error } = await supabase.auth.signInWithPassword(data)
-
-    if (error) {
-        console.error(error)
-        redirect('/error')
-    }
-
-    revalidatePath('/', 'layout')
-    redirect('/account')
 }
 
-export async function signup(formData: FormData) {
-    const supabase = await createClient()
-
-    // type-casting here for convenience
-    // in practice, you should validate your inputs
-    const data = {
-        email: formData.get('email') as string,
-        password: formData.get('password') as string,
+export async function login(
+    prevState: AuthState | null,
+    formData: FormData
+): Promise<AuthState> {
+    const rawData = {
+        email: formData.get('email'),
+        password: formData.get('password'),
     }
 
-    const { error } = await supabase.auth.signUp(data)
+    const result = authSchema.safeParse(rawData)
+
+    if (!result.success) {
+        return {
+            fieldErrors: result.error.flatten().fieldErrors,
+        }
+    }
+
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signInWithPassword(result.data)
 
     if (error) {
-        redirect('/error')
+        // Map Supabase error messages to user-friendly messages
+        if (error.message.includes('Invalid login credentials')) {
+            return { error: 'Invalid email or password' }
+        }
+        if (error.message.includes('Email not confirmed')) {
+            return { error: 'Please verify your email before logging in' }
+        }
+        return { error: error.message }
     }
 
     revalidatePath('/', 'layout')
-    redirect('/account')
+    redirect('/routines')
+}
+
+export async function signup(
+    prevState: AuthState | null,
+    formData: FormData
+): Promise<AuthState> {
+    const rawData = {
+        email: formData.get('email'),
+        password: formData.get('password'),
+    }
+
+    const result = authSchema.safeParse(rawData)
+
+    if (!result.success) {
+        return {
+            fieldErrors: result.error.flatten().fieldErrors,
+        }
+    }
+
+    const supabase = await createClient()
+    const { error } = await supabase.auth.signUp(result.data)
+
+    if (error) {
+        if (error.message.includes('already registered')) {
+            return { error: 'An account with this email already exists' }
+        }
+        return { error: error.message }
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/')
 }
