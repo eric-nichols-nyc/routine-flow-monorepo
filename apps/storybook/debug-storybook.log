@@ -1,0 +1,28 @@
+[18:27:30.301] [INFO] storybook v10.1.8
+[18:27:30.634] [DEBUG] Getting package.json info for /Users/ericnichols/Documents/routine-flow-monorepo/apps/storybook/package.json...
+[18:27:31.692] [DEBUG] Serving static files from [36mnode_modules/.pnpm/@chromatic-com+storybook@4.1.3_storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_re_rvfmsbar3aqnbxnvmts2ptbcpy/node_modules/@chromatic-com/storybook/assets[39m at [36m/addon-visual-tests-assets[39m
+[18:27:31.692] [DEBUG] Serving static files from [36mapps/storybook/public[39m at [36m/[39m
+[18:27:31.705] [INFO] Starting...
+[18:27:31.736] [WARN] No story files found for the specified pattern: [34mstories/**/*.mdx[39m
+[18:27:31.906] [DEBUG] Starting preview..
+[18:27:31.938] [INFO] Using implicit CSS loaders
+[18:27:31.956] [WARN] No story files found for the specified pattern: [34m../../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)[39m
+[18:27:32.220] [INFO] Using SWC as compiler
+[18:27:32.226] [INFO] Using default Webpack5 setup
+[18:27:32.586] [DEBUG] Using tsconfig paths for react-docgen
+[18:27:38.883] [ERROR] Failed to build the preview
+[18:27:38.897] [WARN] Force closed preview build
+[18:27:38.897] [ERROR] [38;2;241;97;97mSB_BUILDER-WEBPACK5_0003 (WebpackCompilationError): There were problems when compiling your code with Webpack.
+Run Storybook with --debug-webpack for more information.[39m
+    at starter (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/@storybook+builder-webpack5@10.1.8_storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7._oz4e6fk3xy6kh6gky33xtoijee/node_modules/@storybook/builder-webpack5/dist/index.js:799:11)
+    at starter.next (<anonymous>)
+    at Module.start (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/@storybook+builder-webpack5@10.1.8_storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7._oz4e6fk3xy6kh6gky33xtoijee/node_modules/@storybook/builder-webpack5/dist/index.js:857:34)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async storybookDevServer (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/core-server/index.js:6806:82)
+    at async buildOrThrow (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/core-server/index.js:5555:12)
+    at async buildDevStandalone (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/core-server/index.js:7208:66)
+    at async withTelemetry (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/_node-chunks/chunk-6CJUCYYK.js:209:12)
+    at async dev (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/bin/core.js:2734:3)
+    at async _Command.<anonymous> (file:///Users/ericnichols/Documents/routine-flow-monorepo/node_modules/.pnpm/storybook@10.1.8_@testing-library+dom@10.4.1_prettier@3.7.4_react-dom@19.2.0_react@19.2.0__react@19.2.0/node_modules/storybook/dist/bin/core.js:2801:92)
+[18:27:38.900] [WARN] Broken build, fix the error above.
+You may need to refresh the browser.

@@ -15,7 +15,7 @@ export default async function RoutineDetailPage({
     }
 
     return (
-        <div className="p-4">
+        <div className="p-4 max-w-4xl mx-auto">
             <Link
                 href="/routines"
                 className="text-sm text-muted-foreground hover:underline mb-4 inline-block"
@@ -25,7 +25,6 @@ export default async function RoutineDetailPage({
 
             <h1 className="text-2xl font-bold mb-4">{routine?.title}</h1>
 
-            <h2 className="text-lg font-semibold mb-2">Items ({items?.length ?? 0})</h2>
             <RoutineList items={items ?? []} />
         </div>
     )
