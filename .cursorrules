@@ -1,0 +1,5 @@
+# Project Rules for next-routine-app
+
+## Next.js 16 Conventions
+- Use `proxy.ts` with `proxy()` function, NOT `middleware.ts` with `middleware()` function
+- This is a Next.js 16 project - do NOT rename proxy.ts

@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/prisma": "workspace:*",
     "@repo/design-system": "workspace:*",
     "@repo/supabase": "workspace:*",
     "@repo/ui": "workspace:*",

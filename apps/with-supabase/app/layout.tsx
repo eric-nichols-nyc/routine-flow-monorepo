@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "@repo/design-system/styles/globals.css"
 import { createClient } from "@repo/supabase/server";
+import { ThemeProvider } from "@repo/design-system/providers/theme";
+import { ModeToggle } from "@repo/design-system/components/mode-toggle";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,9 +31,14 @@ export default async function RootLayout({
   console.log("Layout - User:", user?.email ?? "not logged in");
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <ThemeProvider>
+          <div className="fixed top-4 right-4 z-50">
+            <ModeToggle />
+          </div>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
