@@ -4,7 +4,6 @@ import "./globals.css";
 import "@repo/design-system/styles/globals.css"
 import { createClient } from "@repo/supabase/server";
 import { ThemeProvider } from "@repo/design-system/providers/theme";
-import { ModeToggle } from "@repo/design-system/components/mode-toggle";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -34,9 +33,6 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider>
-          <div className="fixed top-4 right-4 z-50">
-            <ModeToggle />
-          </div>
           {children}
         </ThemeProvider>
       </body>

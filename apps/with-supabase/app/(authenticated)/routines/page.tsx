@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { getRoutines } from './actions'
+import { RoutineBoard } from './_components/routine-board'
+import { Button } from '@repo/design-system/components/ui/button'
 
 export default async function RoutinesPage() {
     const { routines, error } = await getRoutines()
@@ -10,23 +12,13 @@ export default async function RoutinesPage() {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Routines</h1>
-            <div className="space-y-4">
-                {routines?.map((routine) => (
-                    <Link
-                        key={routine.id}
-                        href={`/routines/${routine.id}`}
-                        className="block hover:opacity-80 transition-opacity"
-                    >
-                        <pre className="bg-muted p-4 rounded-lg overflow-auto">
-                            {JSON.stringify(routine, null, 2)}
-                        </pre>
-                    </Link>
-                ))}
-                {routines?.length === 0 && (
-                    <p className="text-muted-foreground">No routines yet.</p>
-                )}
+            <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl font-bold">Your Routines</h1>
+                <Button asChild>
+                    <Link href="/routines/create">Add a routine</Link>
+                </Button>
             </div>
+            <RoutineBoard routines={routines ?? []} />
         </div>
     )
 }
