@@ -2,7 +2,12 @@
   "extends": "@repo/typescript-config/nextjs.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": "../..",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["../with-supabase/*"],
+      "@repo/*": ["../../packages/*"]
+    }
   },
   "include": [".storybook/**/*", "stories/**/*", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "dist"]
