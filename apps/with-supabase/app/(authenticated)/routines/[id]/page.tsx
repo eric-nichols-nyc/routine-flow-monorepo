@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { getRoutineWithItems } from '../actions'
-import { RoutineList } from './_components/routine-list'
+import { RoutineDetailClient } from './_components/routine-detail-client'
 
 export default async function RoutineDetailPage({
     params,
@@ -25,7 +25,7 @@ export default async function RoutineDetailPage({
 
             <h1 className="text-2xl font-bold mb-4">{routine?.title}</h1>
 
-            <RoutineList items={items ?? []} />
+            <RoutineDetailClient items={items ?? []} />
         </div>
     )
 }
