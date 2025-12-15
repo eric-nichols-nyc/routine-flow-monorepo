@@ -3,11 +3,12 @@ import type { RoutineItem } from "@/types/routine";
 
 interface RoutineListProps {
   items: RoutineItem[];
+  onAddItem?: () => void;
 }
 
-export function RoutineList({ items }: RoutineListProps) {
+export function RoutineList({ items, onAddItem }: RoutineListProps) {
   return (
-    <div className="flex max-h-[calc(100vh-160px)] flex-col rounded-2xl border bg-card shadow-sm">
+    <div className="flex max-h-[calc(100vh-160px)] min-w-96 flex-col rounded-2xl border bg-card shadow-sm w-full">
       <div className="flex items-center justify-between border-b px-4 py-3">
         <div className="space-y-0.5">
           <p className="text-sm font-semibold leading-none">Routine items</p>
@@ -37,6 +38,7 @@ export function RoutineList({ items }: RoutineListProps) {
       <div className="border-t px-4 py-3">
         <button
           type="button"
+          onClick={onAddItem}
           className="flex w-full items-center gap-2 rounded-lg border border-dashed px-3 py-2 text-sm font-medium transition-colors hover:border-primary/50 hover:bg-accent"
         >
           <Plus className="h-4 w-4" />
