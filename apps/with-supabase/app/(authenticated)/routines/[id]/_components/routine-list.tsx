@@ -1,10 +1,19 @@
 "use client";
 
+import { DndContext, closestCenter, type DragEndEvent } from "@dnd-kit/core";
+import {
+  SortableContext,
+  arrayMove,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlarmClock,
   CheckCircle2,
   Clock,
+  GripVertical,
   MoreHorizontal,
   Pause,
   Play,
@@ -23,17 +32,29 @@ import type { RoutineItem } from "@/types/routine";
 
 interface RoutineListProps {
   items: RoutineItem[];
+  onAddItem?: () => void;
+  onReorder?: (items: RoutineItem[]) => void;
 }
 
-export function RoutineList({ items }: RoutineListProps) {
+export function RoutineList({ items, onAddItem, onReorder }: RoutineListProps) {
+  const sortedItems = useMemo(
+    () => [...items].sort((a, b) => a.position - b.position),
+    [items],
+  );
+
+  const [orderedItems, setOrderedItems] = useState<RoutineItem[]>(sortedItems);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const hasPlayedCompletionSound = useRef(false);
 
-  const currentTask = items[currentIndex];
-  const nextTask = items[currentIndex + 1];
+  useEffect(() => {
+    setOrderedItems(sortedItems);
+  }, [sortedItems]);
+
+  const currentTask = orderedItems[currentIndex];
+  const nextTask = orderedItems[currentIndex + 1];
 
   const playCompletionSound = useMemo(
     () =>
@@ -94,8 +115,30 @@ export function RoutineList({ items }: RoutineListProps) {
     }
   }, [currentTask, playCompletionSound, remainingSeconds]);
 
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    if (!over || active.id === over.id) return;
+
+    setOrderedItems((currentItems) => {
+      const oldIndex = currentItems.findIndex((item) => item.id === active.id);
+      const newIndex = currentItems.findIndex((item) => item.id === over.id);
+
+      if (oldIndex === -1 || newIndex === -1) return currentItems;
+
+      const reorderedItems = arrayMove(currentItems, oldIndex, newIndex).map(
+        (item, index) => ({
+          ...item,
+          position: index + 1,
+        }),
+      );
+
+      onReorder?.(reorderedItems);
+
+      return reorderedItems;
+    });
+  };
+
   const startRoutine = () => {
-    if (items.length === 0) return;
+    if (orderedItems.length === 0) return;
     setIsSheetOpen(true);
     setCurrentIndex(0);
     setElapsedSeconds(0);
@@ -112,7 +155,7 @@ export function RoutineList({ items }: RoutineListProps) {
   };
 
   const goToNextTask = () => {
-    if (currentIndex < items.length - 1) {
+    if (currentIndex < orderedItems.length - 1) {
       setCurrentIndex((index) => index + 1);
       setElapsedSeconds(0);
       setIsPaused(false);
@@ -131,12 +174,12 @@ export function RoutineList({ items }: RoutineListProps) {
     : 0;
 
   return (
-    <div className="flex max-h-[calc(100vh-160px)] flex-col rounded-2xl border bg-card shadow-sm">
+    <div className="flex max-h-[calc(100vh-160px)] min-w-96 flex-col rounded-2xl border bg-card shadow-sm w-full">
       <div className="flex items-center justify-between gap-2 border-b px-4 py-3">
         <div className="space-y-0.5">
           <p className="text-sm font-semibold leading-none">Routine items</p>
           <p className="text-xs text-muted-foreground">
-            {items.length} item{items.length === 1 ? "" : "s"}
+            {orderedItems.length} item{orderedItems.length === 1 ? "" : "s"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -144,7 +187,7 @@ export function RoutineList({ items }: RoutineListProps) {
             variant="outline"
             size="sm"
             onClick={startRoutine}
-            disabled={items.length === 0}
+            disabled={orderedItems.length === 0}
           >
             <Play className="mr-2 h-4 w-4" /> Start routine
           </Button>
@@ -158,19 +201,29 @@ export function RoutineList({ items }: RoutineListProps) {
         </div>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
-        {items.length === 0 ? (
-          <p className="rounded-lg border border-dashed px-3 py-4 text-sm text-muted-foreground">
-            No items yet. Start building your routine below.
-          </p>
-        ) : (
-          items.map((item) => <RoutineListItem key={item.id} item={item} />)
-        )}
-      </div>
+      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+        <SortableContext
+          items={orderedItems.map((item) => item.id)}
+          strategy={verticalListSortingStrategy}
+        >
+          <div className="flex-1 space-y-3 overflow-y-auto px-4 py-3">
+            {orderedItems.length === 0 ? (
+              <p className="rounded-lg border border-dashed px-3 py-4 text-sm text-muted-foreground">
+                No items yet. Start building your routine below.
+              </p>
+            ) : (
+              orderedItems.map((item) => (
+                <SortableRoutineListItem key={item.id} item={item} />
+              ))
+            )}
+          </div>
+        </SortableContext>
+      </DndContext>
 
       <div className="border-t px-4 py-3">
         <button
           type="button"
+          onClick={onAddItem}
           className="flex w-full items-center gap-2 rounded-lg border border-dashed px-3 py-2 text-sm font-medium transition-colors hover:border-primary/50 hover:bg-accent"
         >
           <Plus className="h-4 w-4" />
@@ -197,7 +250,7 @@ export function RoutineList({ items }: RoutineListProps) {
               </SheetTitle>
               <p className="text-sm text-muted-foreground">
                 {currentTask
-                  ? `Task ${currentIndex + 1} of ${items.length}`
+                  ? `Task ${currentIndex + 1} of ${orderedItems.length}`
                   : "You finished all tasks in this routine."}
               </p>
             </SheetHeader>
@@ -356,9 +409,22 @@ function CircularCountdown({ progress, overtime, hasDuration }: CircularCountdow
   );
 }
 
-export function RoutineListItem({ item }: RoutineListItemProps) {
+function SortableRoutineListItem({ item }: RoutineListItemProps) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: item.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
   return (
-    <div className="rounded-xl border bg-muted/40 px-4 py-3 transition-colors hover:border-primary/50">
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={`group rounded-xl border bg-muted/40 px-4 py-3 transition-colors hover:border-primary/50 ${isDragging ? "border-primary shadow-sm" : ""}`}
+      {...attributes}
+      {...listeners}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary">
@@ -371,6 +437,11 @@ export function RoutineListItem({ item }: RoutineListItemProps) {
               <span>{formatDuration(item.duration_seconds)}</span>
             </div>
           </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <span className="text-xs font-medium text-muted-foreground/70">{item.position}</span>
+          <GripVertical className="h-4 w-4" aria-hidden="true" />
         </div>
       </div>
     </div>

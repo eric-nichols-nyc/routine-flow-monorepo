@@ -4,12 +4,12 @@ const config: StorybookConfig = {
   stories: [
     "../stories/**/*.mdx",
     "../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    // Apps - explicitly list to avoid node_modules
-    "../../with-supabase/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../docs/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    // Packages
-    "../../../packages/design-system/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-    "../../../packages/ui/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    // Apps - only include app folder, not node_modules
+    "../../with-supabase/app/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../../docs/app/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    // Packages - only include src/components folders
+    "../../../packages/design-system/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../../../packages/ui/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   addons: [
     "@storybook/addon-themes",
