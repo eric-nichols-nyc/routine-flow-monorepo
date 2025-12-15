@@ -21,19 +21,19 @@ export function CircularCountdown({
           className="text-muted stroke-12"
           stroke="currentColor"
           fill="transparent"
-          strokeWidth="12"
+          strokeWidth="16"
           cx="130"
           cy="130"
           r={radius}
           opacity={0.3}
         />
         <circle
-          className={`stroke-[12] transition-[stroke-dashoffset] duration-300 ${
+          className={`stroke-16 transition-[stroke-dashoffset] duration-300 ${
             overtime ? "text-destructive" : "text-primary"
           }`}
           stroke="currentColor"
           fill="transparent"
-          strokeWidth="12"
+          strokeWidth="16"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={dashOffset}
