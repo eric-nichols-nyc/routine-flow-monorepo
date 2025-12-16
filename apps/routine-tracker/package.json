@@ -1,13 +1,13 @@
 {
-  "name": "with-supabase",
+  "name": "routine-tracker",
   "version": "0.1.0",
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "next dev --port 3003",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --max-warnings 0",
+    "lint": "biome check --write",
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {

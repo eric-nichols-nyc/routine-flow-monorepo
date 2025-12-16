@@ -50,7 +50,7 @@ export async function login(
     }
 
     revalidatePath('/', 'layout')
-    redirect('/account')
+    redirect('/routines')
 }
 
 export async function signup(
