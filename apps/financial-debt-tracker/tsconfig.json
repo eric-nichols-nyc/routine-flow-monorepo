@@ -18,8 +18,7 @@
     "next-env.d.ts",
     "next.config.js",
     ".next/types/**/*.ts",
+    "generated/prisma/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

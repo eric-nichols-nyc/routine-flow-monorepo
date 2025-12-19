@@ -1,4 +1,5 @@
-import { createClient } from "@repo/supabase/server";
+import { redirect } from "next/navigation";
+import { createClient } from "@/utils/supabase/server";
 import { DashboardShell } from "./_components/dashboard-shell";
 
 export default async function AuthenticatedLayout({
@@ -10,6 +11,11 @@ export default async function AuthenticatedLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  // Fallback protection - middleware should catch this, but just in case
+  if (!user) {
+    redirect("/login");
+  }
 
   return (
     <DashboardShell

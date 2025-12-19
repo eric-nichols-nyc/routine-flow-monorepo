@@ -2,7 +2,7 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 // scripts/rls-smoke-test.ts
 import "dotenv/config";
-import { createBareClient as createClient } from "@repo/supabase";
+import { createBareClient as createClient } from "../utils/supabase/bare";
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -21,7 +21,7 @@ function assertEnv(value: string | undefined, name: string): string {
 function makeClient() {
   return createClient(
     assertEnv(SUPABASE_URL, "SUPABASE_URL"),
-    assertEnv(SUPABASE_ANON_KEY, "SUPABASE_ANON_KEY")
+    assertEnv(SUPABASE_ANON_KEY, "SUPABASE_ANON_KEY"),
   );
 }
 
@@ -44,7 +44,8 @@ async function getAuthedUserId(supabase: ReturnType<typeof makeClient>) {
   if (error) throw error;
 
   const id = data.user?.id;
-  if (!id) throw new Error("Could not resolve authenticated user id (auth.uid())");
+  if (!id)
+    throw new Error("Could not resolve authenticated user id (auth.uid())");
 
   return id;
 }
@@ -74,7 +75,8 @@ async function main() {
     .single();
 
   if (insErr) throw insErr;
-  if (!routineA?.id) throw new Error("Insert succeeded but no routine returned");
+  if (!routineA?.id)
+    throw new Error("Insert succeeded but no routine returned");
 
   console.log("User A created routine:", routineA.id);
 
@@ -102,7 +104,9 @@ async function main() {
   }
 
   // 4) User B tries to delete User A routine (should delete 0 rows)
-  console.log("\nUser B: attempting delete of User A routine (should fail / delete 0)...");
+  console.log(
+    "\nUser B: attempting delete of User A routine (should fail / delete 0)...",
+  );
   const { error: bDelErr, count: bDelCount } = await supb
     .from("routines")
     .delete({ count: "exact" })

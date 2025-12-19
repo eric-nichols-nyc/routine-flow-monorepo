@@ -1,8 +1,10 @@
-import { createClient } from "@repo/supabase/server";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function AccountPage() {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <div className="p-4">

@@ -1,16 +1,8 @@
 "use client";
 
 import * as React from "react";
-import {
-  CreditCard,
-  Home,
-  LineChart,
-  LogOut,
-  PiggyBank,
-  Settings,
-  User,
-  Wallet,
-} from "lucide-react";
+import { LogOut, Settings, User, Wallet } from "lucide-react";
+import { navigationItems, settingsItems } from "@/config/navigation";
 
 import {
   Sidebar,
@@ -21,6 +13,7 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
@@ -49,51 +42,12 @@ interface AppSidebarUser {
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: AppSidebarUser;
-  onLogout: () => void;
+  logoutAction: () => Promise<void>;
 }
 
-const navItems = [
-  {
-    title: "Dashboard",
-    url: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Debts",
-    url: "/dashboard/debts",
-    icon: CreditCard,
-  },
-  {
-    title: "Payments",
-    url: "/dashboard/payments",
-    icon: Wallet,
-  },
-  {
-    title: "Analytics",
-    url: "/dashboard/analytics",
-    icon: LineChart,
-  },
-  {
-    title: "Savings Goals",
-    url: "/dashboard/goals",
-    icon: PiggyBank,
-  },
-];
+export function AppSidebar({ user, logoutAction, ...props }: AppSidebarProps) {
+  const [isPending, startTransition] = React.useTransition();
 
-const settingsItems = [
-  {
-    title: "Account",
-    url: "/account",
-    icon: User,
-  },
-  {
-    title: "Settings",
-    url: "/dashboard/settings",
-    icon: Settings,
-  },
-];
-
-export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
   const userInitials =
     user.name
       ?.split(" ")
@@ -103,6 +57,12 @@ export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
       .slice(0, 2) ||
     user.email?.[0]?.toUpperCase() ||
     "U";
+
+  const handleLogout = () => {
+    startTransition(async () => {
+      await logoutAction();
+    });
+  };
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -132,7 +92,7 @@ export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navItems.map((item) => (
+              {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild tooltip={item.title}>
                     <a href={item.url}>
@@ -140,6 +100,9 @@ export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
+                  {item.badge && (
+                    <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
@@ -231,9 +194,9 @@ export function AppSidebar({ user, onLogout, ...props }: AppSidebarProps) {
                   </a>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onLogout}>
+                <DropdownMenuItem onClick={handleLogout} disabled={isPending}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  Log out
+                  {isPending ? "Logging out..." : "Log out"}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
