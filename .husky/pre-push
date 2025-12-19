@@ -1,0 +1,6 @@
+# Run type checking
+pnpm check-types
+
+# Run E2E tests for financial-debt-tracker
+pnpm --filter financial-debt-tracker test
+

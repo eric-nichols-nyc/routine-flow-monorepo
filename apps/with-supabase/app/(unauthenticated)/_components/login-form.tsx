@@ -1,35 +1,46 @@
-"use client"
+"use client";
 
-import { useActionState } from "react"
-import { cn } from "@repo/design-system/lib/utils"
-import { Button } from "@repo/design-system/components/ui/button"
+import { useActionState } from "react";
+import { cn } from "@repo/design-system/lib/utils";
+import { Button } from "@repo/design-system/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@repo/design-system/components/ui/card"
+} from "@repo/design-system/components/ui/card";
 import {
   Field,
   FieldDescription,
   FieldGroup,
   FieldLabel,
-} from "@repo/design-system/components/ui/field"
-import { Input } from "@repo/design-system/components/ui/input"
-import { Alert, AlertDescription } from "@repo/design-system/components/ui/alert"
-import { login, signup, type AuthState } from "../login/actions"
+} from "@repo/design-system/components/ui/field";
+import { Input } from "@repo/design-system/components/ui/input";
+import {
+  Alert,
+  AlertDescription,
+} from "@repo/design-system/components/ui/alert";
+import { login } from "../../../actions/auth/action.login";
+import { signup } from "../../../actions/auth/action.signup";
+import { type AuthState } from "@/types/auth";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [loginState, loginAction, loginPending] = useActionState<AuthState | null, FormData>(login, null)
-  const [signupState, signupAction, signupPending] = useActionState<AuthState | null, FormData>(signup, null)
+  const [loginState, loginAction, loginPending] = useActionState<
+    AuthState | null,
+    FormData
+  >(login, null);
+  const [signupState, signupAction, signupPending] = useActionState<
+    AuthState | null,
+    FormData
+  >(signup, null);
 
-  const error = loginState?.error || signupState?.error
-  const fieldErrors = loginState?.fieldErrors || signupState?.fieldErrors
-  const isPending = loginPending || signupPending
+  const error = loginState?.error || signupState?.error;
+  const fieldErrors = loginState?.fieldErrors || signupState?.fieldErrors;
+  const isPending = loginPending || signupPending;
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -59,7 +70,9 @@ export function LoginForm({
                   disabled={isPending}
                 />
                 {fieldErrors?.email && (
-                  <p className="text-sm text-destructive">{fieldErrors.email[0]}</p>
+                  <p className="text-sm text-destructive">
+                    {fieldErrors.email[0]}
+                  </p>
                 )}
               </Field>
               <Field>
@@ -75,11 +88,17 @@ export function LoginForm({
                   disabled={isPending}
                 />
                 {fieldErrors?.password && (
-                  <p className="text-sm text-destructive">{fieldErrors.password[0]}</p>
+                  <p className="text-sm text-destructive">
+                    {fieldErrors.password[0]}
+                  </p>
                 )}
               </Field>
               <Field>
-                <Button type="submit" formAction={loginAction} disabled={isPending}>
+                <Button
+                  type="submit"
+                  formAction={loginAction}
+                  disabled={isPending}
+                >
                   {loginPending ? "Logging in..." : "Login"}
                 </Button>
                 <Button
@@ -99,5 +118,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

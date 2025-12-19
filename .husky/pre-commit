@@ -1,0 +1,5 @@
+# Run lint-staged on staged files
+pnpm exec lint-staged
+
+# Run unit tests for changed apps
+pnpm --filter financial-debt-tracker test:unit -- --run --passWithNoTests

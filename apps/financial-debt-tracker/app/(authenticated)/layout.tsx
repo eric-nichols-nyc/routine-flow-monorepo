@@ -1,5 +1,5 @@
 import { createClient } from "@repo/supabase/server";
-import { AppHeader } from "./_components/app-header";
+import { DashboardShell } from "./_components/dashboard-shell";
 
 export default async function AuthenticatedLayout({
   children,
@@ -7,18 +7,19 @@ export default async function AuthenticatedLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
-    <div className="min-h-screen">
-      <AppHeader
-        user={{
-          name: user?.user_metadata?.full_name ?? user?.user_metadata?.name,
-          email: user?.email,
-          avatarUrl: user?.user_metadata?.avatar_url,
-        }}
-      />
-      <main>{children}</main>
-    </div>
+    <DashboardShell
+      user={{
+        name: user?.user_metadata?.full_name ?? user?.user_metadata?.name,
+        email: user?.email,
+        avatarUrl: user?.user_metadata?.avatar_url,
+      }}
+    >
+      {children}
+    </DashboardShell>
   );
 }
