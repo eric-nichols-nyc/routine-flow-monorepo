@@ -25,7 +25,7 @@ function SlowList({ query }: { query: string }) {
       .filter(
         (item) =>
           item.name.toLowerCase().includes(query.toLowerCase()) ||
-          item.category.toLowerCase().includes(query.toLowerCase()),
+          item.category?.toLowerCase().includes(query.toLowerCase()),
       )
       .slice(0, 100);
   }, [query]);

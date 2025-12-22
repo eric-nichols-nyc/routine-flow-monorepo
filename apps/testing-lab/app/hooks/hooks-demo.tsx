@@ -8,7 +8,7 @@ import {
   Plus,
   Minus,
   RotateCcw,
-  Toggle,
+  ToggleLeft,
   HardDrive,
   Trash2,
 } from "lucide-react";
@@ -117,7 +117,7 @@ function ToggleDemo() {
             onClick={toggle}
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-violet-500/20 text-violet-400 hover:bg-violet-500/30 text-sm transition-colors"
           >
-            <Toggle className="w-4 h-4" />
+            <ToggleLeft className="w-4 h-4" />
             Toggle
           </button>
           <button

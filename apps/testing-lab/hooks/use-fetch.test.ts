@@ -21,7 +21,7 @@ describe("useFetch", () => {
       });
 
       expect(result.current.data).toHaveLength(3);
-      expect(result.current.data?.[0].name).toBe("John Doe");
+      expect(result.current.data?.[0]?.name).toBe("John Doe");
       expect(result.current.error).toBeNull();
     });
 
@@ -126,7 +126,7 @@ describe("useFetch", () => {
       });
 
       expect(result.current.data).toHaveLength(1);
-      expect(result.current.data?.[0].name).toBe("Test User");
+      expect(result.current.data?.[0]?.name).toBe("Test User");
     });
   });
 });

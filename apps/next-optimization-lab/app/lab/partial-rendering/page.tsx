@@ -42,6 +42,10 @@ async function HeroProduct() {
   const featured = await getFeaturedProducts(1, 100);
   const product = featured[0];
 
+  if (!product) {
+    return <div className="text-zinc-400">No featured product available</div>;
+  }
+
   return (
     <div className="p-6 rounded-2xl bg-gradient-to-br from-pink-500/10 to-violet-500/10 border border-pink-500/20">
       <div className="flex items-center gap-2 text-pink-400 text-sm mb-4">

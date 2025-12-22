@@ -86,9 +86,9 @@ async function FastHeader() {
       <p className="text-xs text-cyan-400 mb-2">
         ✓ Rendered immediately (100ms)
       </p>
-      <h3 className="font-semibold text-zinc-100">{product.name}</h3>
-      <p className="text-sm text-zinc-400">{product.description}</p>
-      <p className="text-lg font-bold text-cyan-400 mt-2">${product.price}</p>
+      <h3 className="font-semibold text-zinc-100">{product?.name}</h3>
+      <p className="text-sm text-zinc-400">{product?.description}</p>
+      <p className="text-lg font-bold text-cyan-400 mt-2">${product?.price}</p>
     </div>
   );
 }

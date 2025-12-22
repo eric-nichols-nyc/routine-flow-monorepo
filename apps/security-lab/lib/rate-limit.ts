@@ -75,7 +75,7 @@ type RateLimitOptions = {
  * - Memory-bounded — won't grow unbounded under attack
  */
 export function rateLimit(options: RateLimitOptions) {
-  const tokenCache = new LRUCache<string, number[]>({
+  const tokenCache = new LRUCache<string, [number]>({
     max: options.uniqueTokenPerInterval || 500,
     ttl: options.interval || 60000,
   });
@@ -90,9 +90,10 @@ export function rateLimit(options: RateLimitOptions) {
      */
     check: (limit: number, token: string): Promise<void> =>
       new Promise<void>((resolve, reject) => {
-        const tokenCount = tokenCache.get(token) || [0];
+        let tokenCount: [number] | undefined = tokenCache.get(token);
 
-        if (tokenCount[0] === 0) {
+        if (!tokenCount) {
+          tokenCount = [0] as [number];
           tokenCache.set(token, tokenCount);
         }
 

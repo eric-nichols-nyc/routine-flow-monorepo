@@ -13,6 +13,7 @@ function renderContent(content: string) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+    if (!line) continue;
 
     // Code blocks
     if (line.startsWith("```")) {
@@ -75,19 +76,19 @@ function renderContent(content: string) {
     if (line.startsWith("|")) {
       const tableLines = [line];
       let j = i + 1;
-      while (j < lines.length && lines[j].startsWith("|")) {
-        tableLines.push(lines[j]);
+      while (j < lines.length && lines[j]?.startsWith("|")) {
+        tableLines.push(lines[j]!);
         j++;
       }
       i = j - 1;
 
-      const rows = tableLines.filter((l) => !l.includes("---"));
+      const rows = tableLines.filter((l): l is string => !l.includes("---"));
       elements.push(
         <div key={i} className="overflow-x-auto my-4">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-zinc-800">
-                {rows[0]
+                {rows[0]!
                   .split("|")
                   .filter(Boolean)
                   .map((cell, idx) => (
@@ -165,7 +166,12 @@ function renderInline(text: string): React.ReactNode {
   while (remaining.length > 0) {
     // Links [text](url)
     const linkMatch = remaining.match(/\[([^\]]+)\]\(([^)]+)\)/);
-    if (linkMatch && linkMatch.index !== undefined) {
+    if (
+      linkMatch &&
+      linkMatch.index !== undefined &&
+      linkMatch[1] &&
+      linkMatch[2]
+    ) {
       if (linkMatch.index > 0) {
         parts.push(
           renderInlineSegment(remaining.slice(0, linkMatch.index), key++),

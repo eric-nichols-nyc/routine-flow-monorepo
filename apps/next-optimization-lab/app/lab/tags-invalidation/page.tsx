@@ -48,7 +48,8 @@ async function invalidateProducts() {
 
   // This invalidates ALL cached requests tagged with 'products'
   // Could be from multiple components, different pages, etc.
-  revalidateTag("products");
+  // Note: Next.js 16 requires a cache profile as the second argument
+  revalidateTag("products", "default");
 
   console.log(
     "[Server Action] revalidateTag('products') called at",

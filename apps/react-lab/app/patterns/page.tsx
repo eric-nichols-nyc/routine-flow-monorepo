@@ -24,7 +24,7 @@ export default function PatternsPage() {
 
       {/* Compound Components */}
       <div className="mb-8">
-        <Section title="Compound Components" icon={Sparkles} color="pink">
+        <Section title="Compound Components" icon={Sparkles} color="rose">
           <p className="text-sm text-zinc-400 mb-4">
             Components that work together to form a complete UI, sharing
             implicit state. Think of HTML's{" "}

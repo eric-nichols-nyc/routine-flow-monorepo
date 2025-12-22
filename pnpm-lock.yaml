@@ -632,6 +632,9 @@ importers:
       '@prisma/client':
         specifier: 7.0.0
         version: 7.0.0(prisma@7.2.0(@types/react@19.2.7)(magicast@0.3.5)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/client-runtime-utils':
+        specifier: ^7.0.0
+        version: 7.1.0
       '@repo/design-system':
         specifier: workspace:*
         version: link:../../packages/design-system
