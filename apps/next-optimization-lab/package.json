@@ -1,0 +1,32 @@
+{
+  "name": "next-optimization-lab",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3010",
+    "build": "next build",
+    "start": "next start",
+    "lint": "biome check --write",
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/design-system": "workspace:*",
+    "@tanstack/react-query": "^5.90.10",
+    "lucide-react": "^0.475.0",
+    "next": "16.0.10",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@repo/biome-config": "workspace:^",
+    "@repo/typescript-config": "workspace:*",
+    "@tailwindcss/postcss": "^4.1.17",
+    "@types/node": "^22.15.3",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "tailwindcss": "^4.1.11",
+    "typescript": "5.9.2"
+  }
+}

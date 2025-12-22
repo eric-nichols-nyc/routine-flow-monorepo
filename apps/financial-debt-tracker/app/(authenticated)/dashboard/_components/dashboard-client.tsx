@@ -1,9 +1,8 @@
 "use client";
 
 import { useDashboard } from "@/hooks/use-dashboard";
-import { MonthlySpending } from "./monthly-spending";
 import { StatCard } from "./stat-card";
-import { CreditAccounts } from "./credit-accounts";
+import { AccountListCard } from "./account-list-card";
 import { Debugger } from "./debugger";
 import { DollarSign, CreditCard, Landmark, RefreshCw } from "lucide-react";
 
@@ -32,7 +31,46 @@ export function DashboardClient() {
     );
   }
 
-  const { expenseMetrics, accounts } = data;
+  const { expenseMetrics, accounts, upcomingRecurring } = data;
+
+  // Transform accounts into list items
+  const creditCards = accounts
+    .filter((a) => a.type === "CREDIT_CARD")
+    .map((a) => ({
+      id: a.id,
+      name: a.name,
+      amount: a.balance,
+      subtitle: a.credit_limit
+        ? `Limit: $${a.credit_limit.toLocaleString()}`
+        : undefined,
+    }));
+
+  const loans = accounts
+    .filter((a) => a.type === "LOAN")
+    .map((a) => ({
+      id: a.id,
+      name: a.name,
+      amount: a.balance,
+    }));
+
+  // Transform recurring charges
+  const recurringItems = upcomingRecurring.map((r) => ({
+    id: r.id,
+    name: r.name,
+    amount: r.amount,
+    subtitle: r.frequency,
+  }));
+
+  // Transform upcoming payments (same data, different presentation)
+  const upcomingItems = upcomingRecurring.map((r) => ({
+    id: r.id,
+    name: r.name,
+    amount: r.amount,
+    subtitle: new Date(r.next_due_date).toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+    }),
+  }));
 
   return (
     <>
@@ -65,10 +103,12 @@ export function DashboardClient() {
           />
         </div>
 
-        {/* Main Content Grid */}
+        {/* Account Lists Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Credit Accounts List */}
-          <CreditAccounts accounts={accounts} />
+          <AccountListCard variant="credit-cards" items={creditCards} />
+          <AccountListCard variant="loans" items={loans} />
+          <AccountListCard variant="recurring" items={recurringItems} />
+          <AccountListCard variant="upcoming" items={upcomingItems} />
         </div>
       </div>
 
